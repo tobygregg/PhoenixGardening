@@ -1,0 +1,111 @@
+/* ─────────────────────────────────────────────────────────────
+   Phoenix Gardening GSY – source styles
+   Edit this file, then run `npm run build` to regenerate
+   assets/css/styles.css (the file the site actually loads).
+   ───────────────────────────────────────────────────────────── */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ---------- Base ---------- */
+@layer base {
+  html { scroll-behavior: smooth; -webkit-tap-highlight-color: transparent; }
+  body { @apply bg-mist text-forest font-sans antialiased; font-feature-settings: "ss01"; }
+  h1, h2, h3 { @apply font-display; font-variation-settings: "SOFT" 60, "opsz" 72; letter-spacing: -0.015em; }
+  ::selection { @apply bg-lime text-forest; }
+  :focus-visible { outline: 3px solid #9bd136; outline-offset: 3px; border-radius: 6px; }
+  [id] { scroll-margin-top: 6rem; }
+  img { @apply select-none; }
+}
+
+/* ---------- Components ---------- */
+@layer components {
+  .wrap { @apply mx-auto w-full max-w-site px-4 sm:px-6 lg:px-8; }
+
+  /* Buttons */
+  .btn { @apply inline-flex items-center justify-center gap-2 rounded-full px-6 py-3.5 text-[15px] font-bold transition duration-200 ease-out; }
+  .btn svg { @apply h-5 w-5 shrink-0; }
+  .btn-primary { @apply bg-forest text-mist hover:bg-fern hover:-translate-y-0.5 shadow-soft; }
+  .btn-lime { @apply bg-lime text-forest hover:bg-white hover:-translate-y-0.5; }
+  .btn-ghost { @apply border-2 border-forest/15 text-forest hover:border-forest hover:bg-white; }
+  .btn-ghost-light { @apply border-2 border-mist/25 text-mist hover:border-lime hover:text-lime; }
+
+  /* Section headings */
+  .h-section { @apply text-[2.25rem] leading-[1.08] sm:text-5xl lg:text-[3.5rem] font-semibold text-balance; }
+  .lede { @apply mt-4 max-w-xl text-lg leading-relaxed text-moss; }
+
+  /* Small rounded tags */
+  .chip { @apply inline-flex items-center gap-1.5 rounded-full bg-leaf-100 px-3 py-1 text-xs font-semibold text-forest; }
+
+  /* Form fields */
+  .field { @apply mt-2 block w-full rounded-xl border-2 border-mist-200 bg-mist-50 px-4 py-3 text-forest placeholder:text-moss/60 transition focus:border-fern focus:bg-white focus:outline-none focus:ring-0; }
+  .label { @apply text-sm font-bold text-forest; }
+}
+
+/* ---------- Motion ---------- */
+/* Scroll reveal: elements with [data-reveal] fade up once when they enter view */
+[data-reveal] { opacity: 0; transform: translateY(24px); transition: opacity .8s cubic-bezier(.2,.7,.2,1), transform .8s cubic-bezier(.2,.7,.2,1); transition-delay: var(--d, 0ms); }
+[data-reveal].is-in { opacity: 1; transform: none; }
+.no-js [data-reveal] { opacity: 1; transform: none; }
+
+/* Hero entrance – the one big orchestrated moment */
+.hero-curve { stroke-dasharray: 900; stroke-dashoffset: 900; animation: draw 1.6s .25s cubic-bezier(.6,0,.2,1) forwards; }
+.hero-photo { opacity: 0; animation: fadeIn 1.2s .1s ease-out forwards; }
+.hero-dot { transform-box: fill-box; transform-origin: center; transform: scale(0); animation: pop .7s cubic-bezier(.3,1.6,.5,1) forwards; animation-delay: calc(700ms + var(--i) * 140ms); }
+.hero-dot:hover .hero-dot-img { transform: scale(1.08); }
+.hero-dot-img { transform-box: fill-box; transform-origin: center; transition: transform .4s ease; }
+.hero-rise > * { opacity: 0; transform: translateY(18px); animation: rise .9s cubic-bezier(.2,.7,.2,1) forwards; }
+.hero-rise > *:nth-child(1) { animation-delay: .05s } .hero-rise > *:nth-child(2) { animation-delay: .15s }
+.hero-rise > *:nth-child(3) { animation-delay: .25s } .hero-rise > *:nth-child(4) { animation-delay: .35s }
+.hero-rise > *:nth-child(5) { animation-delay: .45s }
+
+/* Phoenix emblem builds itself feather by feather */
+.phoenix-build path, .phoenix-build circle { transform-box: fill-box; transform-origin: 50% 100%; opacity: 0; animation: feather .7s cubic-bezier(.3,1.3,.5,1) forwards; }
+
+/* Drifting leaves in the hero background */
+.drift { animation: drift var(--t, 16s) ease-in-out infinite; animation-delay: var(--d, 0s); }
+
+@keyframes draw { to { stroke-dashoffset: 0; } }
+@keyframes fadeIn { to { opacity: 1; } }
+@keyframes pop { to { transform: scale(1); } }
+@keyframes rise { to { opacity: 1; transform: none; } }
+@keyframes feather { from { opacity: 0; transform: scale(.4) rotate(-8deg); } to { opacity: 1; transform: none; } }
+@keyframes drift { 0%, 100% { transform: translate(0,0) rotate(0deg); } 50% { transform: translate(14px,-22px) rotate(18deg); } }
+
+/* Before / after slider */
+.ba { --pos: 50%; }
+.ba-after { clip-path: inset(0 0 0 var(--pos)); }
+.ba-handle { left: var(--pos); }
+.ba input[type=range] { -webkit-appearance: none; appearance: none; background: transparent; cursor: ew-resize; }
+.ba input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 56px; height: 100vh; background: transparent; }
+.ba input[type=range]::-moz-range-thumb { width: 56px; height: 100%; border: 0; background: transparent; }
+.ba input[type=range]:focus-visible + .ba-handle .ba-knob { outline: 3px solid #9bd136; outline-offset: 3px; }
+
+/* Water droplets on the pressure washing slider */
+.spray span { position: absolute; width: 6px; height: 6px; border-radius: 99px; background: #bfe6ff; opacity: 0; animation: spray 1.6s ease-out infinite; animation-delay: var(--d); }
+@keyframes spray { 0% { opacity: 0; transform: translate(0,0) scale(.6); } 20% { opacity: .9; } 100% { opacity: 0; transform: translate(var(--x), var(--y)) scale(1); } }
+
+/* Services preview crossfade */
+.svc-img { opacity: 0; transform: scale(1.04); transition: opacity .6s ease, transform 1.2s ease; }
+.svc-img.is-active { opacity: 1; transform: none; }
+.svc-row[aria-current="true"] .svc-dot { @apply ring-lime; }
+.svc-row[aria-current="true"] .svc-title { @apply text-fern; }
+
+/* FAQ chevron */
+details[open] .faq-icon { transform: rotate(45deg); }
+details summary::-webkit-details-marker { display: none; }
+
+/* Season sun moving along the arc */
+.season-sun { transition: transform .9s cubic-bezier(.5,0,.2,1); }
+
+/* Header once scrolled */
+.site-header.is-scrolled { @apply bg-mist/85 shadow-soft backdrop-blur-md; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; scroll-behavior: auto !important; }
+  [data-reveal] { opacity: 1; transform: none; }
+  .hero-curve { stroke-dashoffset: 0; }
+}
+
+/* Custom dropdown arrow for the parish select */
+select.field { -webkit-appearance: none; appearance: none; padding-right: 2.75rem; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%232f7a2a' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 1rem center; background-size: 1.1rem; }
